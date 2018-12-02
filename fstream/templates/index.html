@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Video Streaming Test</title>
+    
+    <style>
+    #map {
+        height: 200px;
+        width: 300px;
+       }
+       
+       header {
+
+                text-align: center;
+
+        }
+
+        gdata {
+                margin-left: 230px;
+                padding: 0;   
+                position: absolute;
+                left: 10%;
+                color: blue;
+                font-size: x-large;
+        }
+        body {
+                background-color: LightCyan;
+        }
+
+        div.imgContainer{
+            float:left;
+        }
+       
+    </style>      
+  </head>
+  <body>
+    <h1>Video Streaming Demonstration</h1>
+ 
+    <h2><header><font color="red"> Smart Suit Location and Physiologic Data</font></header></h1>
+    <p><h2>Time: <gdata>{{ value['Time'] }}</gdata></h2></p>
+    <p><h2>Latitude:  <gdata>{{ value['Latitude'] }}</gdata></h2></p>
+    <p><h2>Longitude: <gdata>{{ value['Longitude'] }}</gdata></h2></p>
+    <p><h2>Alititude: <gdata>{{ value['Altitude'] }}</gdata></h2></p>
+    <p><h2>Heart Rate: <gdata>{{ value['Physiologic'] }}</gdata></h2></p>
+    <p><h2>Temperature: <gdata>{{ value['Temperature'] }}</gdata></h2></p>
+    <br>
+    
+    <form name="myform4">
+        <input type="hidden" name="formvar" value="<gdata>{{ value['Latitude']}}</gdata>" >
+    </form>
+    
+    <form name="myform2">
+        <input type="hidden" name="formvar" value="<gdata>{{ value['Longitude']}}</gdata>" >
+    </form>   
+    
+    
+    <input id="HiddenLat" type="hidden" value="{{ value['Latitude']}}" >
+    <input id="HiddenLng" type="hidden" value="{{ value['Longitude']}}" >
+    
+    <div class="image12">
+        <div class="imgContainer">
+            <div id="map">
+                <script type="text/javascript">
+                  var valueLat= document.getElementById("HiddenLat").value;
+                  var valueLng= document.getElementById("HiddenLng").value;     
+                  var coordinatesLat = parseFloat(valueLat);   
+                  var coordinatesLon = parseFloat(valueLng);
+		  var zoom_var = 17;
+      
+                  function initMap() {
+                    if (isNaN(coordinatesLat) || isNaN(coordinatesLon)) {
+                        return 'No coordinates available';
+                    }    
+                    var uluru = {lat: coordinatesLat, lng: coordinatesLon};
+                    var map = new google.maps.Map(document.getElementById('map'), {
+                      zoom: zoom_var,
+		      zoomControl: true,
+		      scaleControl: false,
+		      fullscreenControl: false,
+		      rotateControl: false,
+		      streetViewControl: false,
+		      mapTypeControl: false,
+                      mapTypeId: 'hybrid',
+                      center: uluru 
+                    });
+		    zoom_var = map.zoom;
+                    //    map.setMapTypeId('satellite');
+                    var marker = new google.maps.Marker({
+                      position: uluru,
+                      map: map
+                    });
+                  }
+                </script>
+            </div>
+        </div> 
+    
+    
+    
+    
+    <img src="{{ url_for('video_feed') }}" align="right" width="300" height="200">
+  
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZVv47aaTU8ZHERkXFI1WqPOoIQYk9QhA&callback=initMap">
+    </script>
+    <br>
+    <div id="locations" data = "{{ url_for('data') }}"
+    
+    {% for i in data: %}
+    <script type="text/javascript">
+     # $("#locations").data("{{locations}}");
+     $("#data").text(("{{ i }}")
+    </script>
+    {% endfor %}
+    </div>
+  
+    <script>
+   
+    </script>
+                     
+  </body>
+</html>
